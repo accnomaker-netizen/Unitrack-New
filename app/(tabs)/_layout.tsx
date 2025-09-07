@@ -1,24 +1,15 @@
 import { Tabs } from 'expo-router';
-import { useEffect } from 'react';
-import { router } from 'expo-router';
+import { Redirect } from 'expo-router';
 import { Chrome as Home, Search, MapPin, User, SquareCheck as CheckSquare } from 'lucide-react-native';
 import { useColorScheme } from 'react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   
-  useEffect(() => {
-    // Redirect to login if not authenticated
-    if (!global.currentUser) {
-      router.replace('/login');
-      return;
-    }
-    
-    // Redirect students away from faculty-only features
-    if (global.currentUser.role === 'student') {
-      // Students can access all tabs but with limited functionality
-    }
-  }, []);
+  // Redirect to login if not authenticated
+  if (!global.currentUser) {
+    return <Redirect href="/login" />;
+  }
 
   const tabBarStyle = {
     backgroundColor: colorScheme === 'dark' ? '#1f2937' : '#ffffff',
@@ -31,11 +22,6 @@ export default function TabLayout() {
 
   const tabBarActiveTintColor = '#2563eb';
   const tabBarInactiveTintColor = colorScheme === 'dark' ? '#9ca3af' : '#6b7280';
-
-  // Don't render tabs if not authenticated
-  if (!global.currentUser) {
-    return null;
-  }
 
   return (
     <Tabs
